@@ -58,7 +58,7 @@ function preload() {
     game.load.image("redkermit","../assets/redkermit.gif" );
     game.load.image("pipetop","../assets/pipetop.gif" );
     game.load.image("pipebottom","../assets/pipebottom.gif" );
-    game.load.image("ballon","../assets/ballons.png" );
+    game.load.image("balloon","../assets/balloons.png" );
     game.load.image("weight","../assets/weight.png");
     $("#greeting").hide();
 }
@@ -141,6 +141,21 @@ function update() {
 
     player.rotation = Math.atan(player.body.velocity.y / 300);
 
+    for(var i=balloons.length - 1; i >= 0; i--){
+        game.physics.arcade.overlap(player,balloons[i], function(){
+            changeGravity(-50);
+            balloons[i].destroy();
+            balloons.splice(i,1);
+        });
+    }
+
+    for(var i=weights.length - 1; i >= 0; i--){
+        game.physics.arcade.overlap(player,weights[i], function(){
+            changeGravity(+50);
+            weights[i].destroy();
+            weights.splice(i,1);
+        });
+    }
 }
 
 function restart() {
@@ -296,19 +311,19 @@ function generate(){
 }
 
 function generateBalloons(){
-    var bonus = game.add.sprite(width, height, "balloon");
+    var bonus = game.add.sprite(width, height/2, "balloon");
     balloons.push(bonus);
     game.physics.arcade.enable(bonus);
     bonus.body.velocity.x = - 100;
-    bonus.body.velocity.y = - game.rnd.integerInRange(60,100);
+    bonus.body.velocity.y = - game.rnd.integerInRange(-50,50);
 }
 
 function generateWeight(){
-    var bonus = game.add.sprite(width, height, "weight");
+    var bonus = game.add.sprite(width, height/2, "weight");
     balloons.push(bonus);
     game.physics.arcade.enable(bonus);
     bonus.body.velocity.x = - 100;
-    bonus.body.velocity.y = - game.rnd.integerInRange(60,100);
+    bonus.body.velocity.y = - game.rnd.integerInRange(-50,50);
 }
 
 //$.get("/score", function(scores){
