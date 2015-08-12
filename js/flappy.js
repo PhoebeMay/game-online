@@ -11,7 +11,10 @@ var height = 600;
 var speed = 200;
 var gravity = 300;
 var jump = 300;
-pipeInterval = 2;
+var pipeInterval = 2;
+var gapSize = 350;
+var gapMargin = 50;
+var blockHeight = 50;
 
 
 
@@ -155,12 +158,10 @@ function changeScore() {
 }
 
 function addPipeBlock(x,y){
-
     var pipeBlock = game.add.sprite(x,y,"flower");
     pipes.push(pipeBlock);
     game.physics.arcade.enable(pipeBlock);
     pipeBlock.body.velocity.x = -speed;
-
 }
 
 function heart() {
@@ -174,24 +175,34 @@ function heart() {
     }}
 
 function generatePipe() {
-    var gapStart = game.rnd.integerInRange(0, 7);
-    for(var count=0; count<12; count+=1){
-       // if (count!=5 && count != 6)  {
-       //     game.add.sprite(50*count, 50*count, "flower");
-       //     game.add.sprite((50*count), 550-(50*count), "flower");
-         // game.add.sprite(count-position), (count-position)*(count-position), "flower";
-         //  }
-        if(count != gapStart &&
-            count != gapStart + 1&&
-            count != gapStart + 2&&
-            count != gapStart + 3&&
-              count != gapStart + 4&&
-           count != gapStart + 5)
-        {
-            addPipeBlock(800, count*50);}
-        }
-    //changeScore();
+    var gapStart = game.rnd.integerInRange(gapMargin, height- gapSize-gapMargin);
+    for (var topy=gapStart; topy>-50; topy -= blockHeight ){
+        addPipeBlock(width,topy);
+    } //top of pipe
+    for (var bottomy=gapStart + gapSize ; bottomy<height+50 ; bottomy += blockHeight) {
+        addPipeBlock(width,bottomy)
+    } //bottom of pipe
 }
+
+//function generatePipe() {
+//    var gapStart = game.rnd.integerInRange(0, 7);
+//    for(var count=0; count<12; count+=1){
+//       // if (count!=5 && count != 6)  {
+//       //     game.add.sprite(50*count, 50*count, "flower");
+//       //     game.add.sprite((50*count), 550-(50*count), "flower");
+//         // game.add.sprite(count-position), (count-position)*(count-position), "flower";
+//         //  }
+//        if(count != gapStart &&
+//            count != gapStart + 1&&
+//            count != gapStart + 2&&
+//            count != gapStart + 3&&
+//              count != gapStart + 4&&
+//           count != gapStart + 5)
+//        {
+//            addPipeBlock(800, count*50);}
+//        }
+//    //changeScore();
+//}
 
 function gameOver(){
     game.add.text(0, 100, "YOU DIED LOL",
