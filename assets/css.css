@@ -1,0 +1,54 @@
+body {
+    background-color: mediumpurple;
+    margin: 20%;
+}
+
+h1 {
+    background-color: #00ff00;
+    font-size: 100px;
+    font-family: "Giddyup Std" ;
+}
+
+p {
+    background-color: rgb(255,0,255);
+    font-size: 50px;
+    font-family: "Comic Sans MS" ;
+    text-align: center;
+    border: 50px greenyellow;
+}
+
+ul {
+    background-color: deepskyblue;
+}
+
+#one {
+    color: #ffff00;
+    background-color: black;
+    font-size: 180px;
+    font-family: "Giddyup Std" ;
+    border: 50px greenyellow;
+}
+
+#two {
+    color: orangered;
+    background-color: black;
+    font-size: 100px;
+    font-family: "Giddyup Std" ;
+}
+
+#three {
+    color: red;
+    background-color: black;
+    font-size: 50px;
+    font-family: "Giddyup Std" ;
+    border: 50px greenyellow;
+}
+
+.title {
+    color: #ffffff;
+    background-color: mediumpurple;
+    font-size: 20px;
+    font-family: Arial ;
+    border: 50px #ffffff;
+    text-align: right;
+}

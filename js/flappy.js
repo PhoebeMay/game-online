@@ -1,5 +1,11 @@
 // the Game object used by the phaser.io library
 var stateActions = { preload: preload, create: create, update: update };
+var score=0;
+var labelScore;
+var player;
+var pipes = [];
+var kermits = [];
+var redkermits = [];
 
 // Phaser parameters:
 // - game width
@@ -7,26 +13,235 @@ var stateActions = { preload: preload, create: create, update: update };
 // - renderer (go for Phaser.AUTO)
 // - element where the game will be drawn ('game')
 // - actions on the game state (or null for nothing)
-var game = new Phaser.Game(790, 400, Phaser.AUTO, 'game', stateActions);
+var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', stateActions);
 
 /*
  * Loads all resources for the game and gives them names.
  */
 function preload() {
+    jQuery("#greeting-form").on("submit", function(event_details) {
+        var greeting = "Yo ";
+        var name = jQuery("#fullName").val();
+        //var email = jQuery("#email").val();
+        var score = jQuery("#score").val();
+        var greeting_message = greeting + name +"     score"  +score ;
+        //jQuery("#greeting-form").hide();
+        //jQuery("#greeting-form").fadeOut( 1000);
+        jQuery("#greeting").append("<p>" + greeting_message + "</p>");
+        //event_details.preventDefault();
+        jQuery("#greeting-form").hide();
+        game.paused = false;
+        game.state.restart();
+
+    });
 
 
+    game.load.image("playerImg", "../assets/jamesBond.gif");
+    game.load.image("kermit", "../assets/kermit.gif");
+    game.load.image("heart", "../assets/heart.jpg");
+    game.load.image("backgroundImg", "../assets/background.jpg");
+    game.load.audio("score", "../assets/point.ogg");
+    game.load.image("kitten", "../assets/kitten.gif");
+    game.load.image("flower","../assets/flower.jpg" );
+    game.load.image("redkermit","../assets/redkermit.gif" );
+    $("#greeting").hide();
 }
 
 /*
  * Initialises the game. This function is only called once.
  */
 function create() {
-    // set the background colour of the scene
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+    game.stage.setBackgroundColor("#FFFF00");
+    game.add.image(0, 0, "backgroundImg");
+    game.add.sprite(10, 10, "playerImg");
+    game.add.text(-13, 300, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
+        "AAAAAAAAAAAAAAAA",
+        {font: "100px Giddyup Std", fill: "#FF0000"});
+    game.input
+        .onDown
+        .add(clickHandler);
+    game.input
+        .keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+        .onDown.add(spaceHandler);
+    labelScore = game.add.text(400, 100, "0",
+        {font: "300px Comic Sans MS", fill: "#FFFF00"});
+    player = game.add.sprite(100, 200, "kitten");
+    player.anchor.setTo(0.5, 0.5);
+    game.physics.arcade.enable(player);
+//    player.body.velocity.x = 100;
+    //player.body.velocity.x=100;
+    player.body.gravity.y = 300;
+    game.input
+        .keyboard.addKey(Phaser.Keyboard.RIGHT)
+        .onDown.add(moveRight);
+    game.input
+        .keyboard.addKey(Phaser.Keyboard.LEFT)
+        .onDown.add(moveLeft);
+    game.input
+        .keyboard.addKey(Phaser.Keyboard.UP)
+        .onDown.add(moveUp);
+    game.input
+        .keyboard.addKey(Phaser.Keyboard.DOWN)
+        .onDown.add(moveDown);
+    game.input.keyboard
+        .addKey(Phaser.Keyboard.SPACEBAR)
+        .onDown.add(playerJump);
+    heart();
+    generatePipe();
+    KermitGlide(0,200,100);
+    KermitGlide(-100,200,100);
+    KermitGlide(-200,200,100);
+    KermitGlide(-300,200,100);
+    RedKermitGlide(5000,150,-1000)
+    pipeInterval = 2;
+    game.time.events.loop(pipeInterval*Phaser.Timer.SECOND,generatePipe);
+    //("#greeting").fadeOut(1000);
 }
 
-/*
- * This function updates the scene. It is called for every new frame.
- */
 function update() {
 
+    game.physics.arcade
+        .overlap(player,
+                  pipes,
+                  gameOver);
+
+    for(var index=0;index<kermits.length;index++) {
+        if (kermits[index].x > 800) {
+            kermits[index].x = -180
+        }
+    }
+    for(var index=0;index<redkermits.length;index++) {
+        if (redkermits[index].x < -1000) {
+            redkermits[index].x = 5000
+        }
+        redkermits[index].rotation += 0.1;
+    }
+    if (
+            player.y > 600 ||
+            player.y < 0 ) {
+        gameOver();
+    }
+
+    player.rotation = Math.atan(player.body.velocity.y / 300);
+
 }
+
+function clickHandler(event) {
+    game.add.sprite(event.x-35, event.y, "kermit");
+    game.sound.play("score");
+}
+
+function spaceHandler() {
+    game.sound.play("score");
+}
+
+function changeScore() {
+    score = score+1;
+    labelScore.setText(score.toString());
+}
+
+function addPipeBlock(x,y){
+
+    var pipeBlock = game.add.sprite(x,y,"flower");
+    pipes.push(pipeBlock);
+    game.physics.arcade.enable(pipeBlock);
+    pipeBlock.body.velocity.x = -200;
+
+}
+
+function heart() {
+
+    for(var count=0; count<15; count+=1){
+        if (count!=5 && count != 6)  {
+            game.add.sprite(50*count, 50*count, "heart");
+            game.add.sprite((50*count), 550-(50*count), "heart");
+            // game.add.sprite(count-position), (count-position)*(count-position), "flower";
+        }
+    }}
+
+function generatePipe() {
+    var gapStart = game.rnd.integerInRange(0, 7);
+    for(var count=0; count<12; count+=1){
+       // if (count!=5 && count != 6)  {
+       //     game.add.sprite(50*count, 50*count, "flower");
+       //     game.add.sprite((50*count), 550-(50*count), "flower");
+         // game.add.sprite(count-position), (count-position)*(count-position), "flower";
+         //  }
+        if(count != gapStart &&
+            count != gapStart + 1&&
+            count != gapStart + 2&&
+            count != gapStart + 3&&
+              count != gapStart + 4&&
+           count != gapStart + 5)
+        {
+            addPipeBlock(800, count*50);}
+        }
+    changeScore();
+}
+
+function gameOver(){
+    game.add.text(0, 100, "YOU DIED LOL",
+        {font: "100px Arial", fill: "#FF69B4"});
+    //setTimeout(function(){
+    //    game.destroy();
+    //},1);
+    setTimeout(function(){
+        game.paused = true;
+    },1);
+    //game.paused(true);
+    $("#score").val(score.toString());
+    $("#greeting").fadeIn(2000);
+    //$("#greeting").show();
+}
+
+function KermitGlide(x,y,v) {
+    kermit = game.add.sprite(x, y, "kermit");
+    game.physics.arcade.enable(kermit);
+    kermit.body.velocity.x=v;
+    kermits.push(kermit);
+}
+
+function RedKermitGlide(x,y,v) {
+    redkermit = game.add.sprite(x, y, "redkermit");
+    game.physics.arcade.enable(redkermit);
+    redkermit.body.velocity.x=v;
+    redkermit.anchor.setTo(0.5, 0.5);
+    redkermits.push(redkermit);
+}
+
+function playerJump() {
+    player.body.velocity.y = -300;
+}
+
+function moveRight() {
+    player.body.velocity.x = 100;
+}
+
+function moveLeft() {
+    player.body.velocity.x = -100;
+}
+
+function moveUp() {
+    player.body.velocity.y = -100;
+}
+
+function moveDown() {
+    player.body.velocity.y = 100;
+}
+
+//$.get("/score", function(scores){
+//    console.log("Data: ",scores);
+//});
+
+$.get("/score", function(scores){
+    scores.sort(function (scoreA, scoreB){
+        var difference = scoreB.score - scoreA.score;
+        return difference;
+    });
+
+    for (var i = 0; i < 4; i++) {
+        $("#scoreBoard").append(
+            "<li id=a"+i+">" + scores[i].name + ": " + scores[i].score + "</li>");
+      }
+});

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../lib/bootstrap.css"/>
+    <title>THE GAME</title>
+</head>
+<body>
+
+<div class="container">
+    <div class="jumbotron">
+        <h1> THIS IS MY GAME </h1>
+        <p> FEAR IT</p>
+    </div>
+
+    <!--<div id="greeting">
+        <form id="greeting-form" class="form-inline">
+            <div class="form-group">
+                <label for="fullName">NAME    </label>
+                <input type="text" id="fullName"
+                       name="fullName" class="form-control" placeholder="Kermit">
+            </div>
+            <button class="btn btn-danger" type="submit">CLICK!!!!</button>
+        </form>
+        <br>
+    </div>-->
+
+    <!--<div class="row" style= "width:810px;height:610px;border:5px outset orange;" >-->
+    <div class ="row">
+        <div id="game" align="center">
+        </div>
+    </div>
+    <br>
+
+
+    <div class="row">
+        <!--<div class="col-xs-8">
+            <p id="gameLink">
+                <a href="example.html"><img src="../assets/screenshot.gif" class="img-responsive" /></a>
+            </p>
+        </div>-->
+
+        <!--<div class="col-xs-4">
+            <p id="babyLink">
+                <a href="example.html"><img src="../assets/screenshot.gif" class="img-responsive
+                    img-thumbnail" /></a>
+            </p>
+        </div>
+
+        <div class="col-xs-4">
+            <p id="babyLink">
+                <a href="example.html"><img src="../assets/screenshot.gif" class="img-circle
+                    img-responsive" /></a>
+            </p>
+        </div>
+
+        <div class="col-xs-4">
+            <p id="babyLink">
+                <a href="example.html"><img src="../assets/screenshot.gif" class="img-rounded
+                     img-responsive" /></a>
+            </p>
+        </div>-->
+    </div>
+</div>
+
+<div class = row align="center">
+    <div class="col-xs-1">
+    </div>
+    <div class="col-xs-3" >
+        <div id="greeting" align="center">
+            <form id="greeting-form" method="post" action="/score">
+                <div class="form-group">
+                    <label for="fullName">NAME    </label>
+                    <input type="text" id="fullName"
+                           name="fullName" class="form-control" placeholder="Kermit">
+                    <!--<label for="email">EMAIL</label>-->
+                    <!--<input type="email" id="email" class="form-control"-->
+                           <!--name="email" placeholder="bob@email.com">-->
+                    <input type="hidden" id="score" name="score" value="0">
+                </div>
+                <button class="btn btn-danger" type="submit">CLICK!!!!</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-xs-1">
+        <p>                                             </p>
+    </div>
+    <div class="col-xs-6" align="center">
+        <ul id="scoreBoard">
+            <!--<li id="a0">Bird 1</li>-->
+            <!--<li id="a1">Bird 2</li>-->
+            <!--<li id="a2">Bird 3</li>-->
+        </ul>
+    </div>
+    <div class="col-xs-2">
+        <p>  </p>
+    </div>
+</div>
+
+
+
+
+</div>
+
+<script src="../lib/jquery.js"></script>
+<script type="text/javascript" src="../lib/phaser.min.js"></script>
+<script type="text/javascript" src="../js/flappy.js"></script>
+</body>
+</html>
