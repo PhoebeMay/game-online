@@ -15,6 +15,8 @@ var pipeInterval = 2;
 var gapSize = 350;
 var gapMargin = 50;
 var blockHeight = 50;
+var balloons = [];
+var weights = [];
 
 
 
@@ -54,6 +56,10 @@ function preload() {
     game.load.image("kitten", "../assets/kitten.gif");
     game.load.image("flower","../assets/flower.jpg" );
     game.load.image("redkermit","../assets/redkermit.gif" );
+    game.load.image("pipetop","../assets/pipetop.gif" );
+    game.load.image("pipebottom","../assets/pipebottom.gif" );
+    game.load.image("ballon","../assets/ballons.png" );
+    game.load.image("weight","../assets/weight.png");
     $("#greeting").hide();
 }
 
@@ -103,7 +109,7 @@ function create() {
     KermitGlide(-100,200,100);
     KermitGlide(-200,200,100);
     KermitGlide(-300,200,100);
-    game.time.events.loop(pipeInterval*Phaser.Timer.SECOND,generatePipe);
+    game.time.events.loop(pipeInterval*Phaser.Timer.SECOND,generate);
     game.time.events.loop(pipeInterval*Phaser.Timer.SECOND,changeScore);
     //("#greeting").fadeOut(1000);
     RedKermitGlide(5000,150,-1000);
@@ -140,6 +146,7 @@ function update() {
 function restart() {
     score = 0;
     game.paused = false;
+    gravity = 300;
     game.state.restart();
 }
 
@@ -155,6 +162,20 @@ function spaceHandler() {
 function changeScore() {
     score = score+1;
     labelScore.setText(score.toString());
+}
+
+function addPipeTopEnd(x,y){
+    var pipetop = game.add.sprite(x,y,"pipetop");
+    pipes.push(pipetop);
+    game.physics.arcade.enable(pipetop);
+    pipetop.body.velocity.x = -speed;
+}
+
+function addPipeBottomEnd(x,y){
+    var pipebot = game.add.sprite(x,y,"pipebottom");
+    pipes.push(pipebot);
+    game.physics.arcade.enable(pipebot);
+    pipebot.body.velocity.x = -speed;
 }
 
 function addPipeBlock(x,y){
@@ -182,6 +203,8 @@ function generatePipe() {
     for (var bottomy=gapStart + gapSize ; bottomy<height+50 ; bottomy += blockHeight) {
         addPipeBlock(width,bottomy)
     } //bottom of pipe
+    addPipeTopEnd(width,gapStart+50);
+    addPipeBottomEnd(width,gapStart + gapSize-17);
 }
 
 //function generatePipe() {
@@ -203,6 +226,11 @@ function generatePipe() {
 //        }
 //    //changeScore();
 //}
+
+function changeGravity(g) {
+    gravity += g;
+    player.body.gravity.y = gravity;
+}
 
 function gameOver(){
     game.add.text(0, 100, "YOU DIED LOL",
@@ -252,6 +280,35 @@ function moveUp() {
 
 function moveDown() {
     player.body.velocity.y = 100;
+}
+
+function generate(){
+    var diceRoll = game.rnd.integerInRange(1, 10);
+    if(diceRoll==1) {
+        generateBalloons();
+    }
+    else if(diceRoll==2) {
+        generateWeight();
+    }
+    else {
+        generatePipe();
+    }
+}
+
+function generateBalloons(){
+    var bonus = game.add.sprite(width, height, "balloon");
+    balloons.push(bonus);
+    game.physics.arcade.enable(bonus);
+    bonus.body.velocity.x = - 100;
+    bonus.body.velocity.y = - game.rnd.integerInRange(60,100);
+}
+
+function generateWeight(){
+    var bonus = game.add.sprite(width, height, "weight");
+    balloons.push(bonus);
+    game.physics.arcade.enable(bonus);
+    bonus.body.velocity.x = - 100;
+    bonus.body.velocity.y = - game.rnd.integerInRange(60,100);
 }
 
 //$.get("/score", function(scores){
