@@ -34,7 +34,7 @@ app.post('/score', function(request, response){
     var data = [name, score];
     database.writeRecord(data);
     database.writeStream.end();
-    response.send("Thanks " + name + ", your score has been recorded!");
+    //response.send("Thanks " + name + ", your score has been recorded!");
 
     //response.send(request.body.fullName + " ("
     //+ request.body.email + ") score: " + request.body.score);

@@ -6374,6 +6374,15 @@ body {
     margin: 0%;
 }
 
+p {
+    color: white;
+    background-color: black;
+    font-size: 25px;
+    font-family: "Giddyup Std" ;
+    border: 50px greenyellow;
+    text-align: center;
+}
+
 #greeting {
     /*position: absolute;        */
     /*left: 40%;                 */
