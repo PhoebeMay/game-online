@@ -17,6 +17,9 @@ var gapMargin = 50;
 var blockHeight = 50;
 var balloons = [];
 var weights = [];
+var splashDisplay ;
+var background;
+var backgrounds = [];
 
 
 
@@ -51,7 +54,7 @@ function preload() {
     game.load.image("playerImg", "../assets/jamesBond.gif");
     game.load.image("kermit", "../assets/kermit.gif");
     game.load.image("heart", "../assets/heart.jpg");
-    game.load.image("backgroundImg", "../assets/background.jpg");
+    game.load.image("backgroundImg", "../assets/background2.gif");
     game.load.audio("score", "../assets/point.ogg");
     game.load.image("kitten", "../assets/kitten.gif");
     game.load.image("flower","../assets/flower.jpg" );
@@ -60,6 +63,7 @@ function preload() {
     game.load.image("pipebottom","../assets/pipebottom.gif" );
     game.load.image("balloon","../assets/balloons.png" );
     game.load.image("weight","../assets/weight.png");
+    game.load.image("bigflower","../assets/bigflower.gif");
     $("#greeting").hide();
 }
 
@@ -67,52 +71,69 @@ function preload() {
  * Initialises the game. This function is only called once.
  */
 function create() {
-    game.physics.startSystem(Phaser.Physics.ARCADE);
     game.stage.setBackgroundColor("#FFFF00");
     game.add.image(0, 0, "backgroundImg");
-    game.add.sprite(10, 10, "playerImg");
+    //backgroundroll(0)
+    //backgroundroll(3802)
     game.add.text(-13, 300, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
         "AAAAAAAAAAAAAAAA",
         {font: "100px Giddyup Std", fill: "#FF0000"});
-    game.input
-        .onDown
-        .add(clickHandler);
-    game.input
-        .keyboard.addKey(Phaser.Keyboard.SPACEBAR)
-        .onDown.add(spaceHandler);
     labelScore = game.add.text(400, 100, "0",
         {font: "300px Comic Sans MS", fill: "#FFFF00"});
     player = game.add.sprite(100, 200, "kitten");
-    player.anchor.setTo(0.5, 0.5);
     game.physics.arcade.enable(player);
-//    player.body.velocity.x = 100;
-    //player.body.velocity.x=100;
-    player.body.gravity.y = gravity;
-    game.input
-        .keyboard.addKey(Phaser.Keyboard.RIGHT)
-        .onDown.add(moveRight);
-    game.input
-        .keyboard.addKey(Phaser.Keyboard.LEFT)
-        .onDown.add(moveLeft);
-    game.input
-        .keyboard.addKey(Phaser.Keyboard.UP)
-        .onDown.add(moveUp);
-    game.input
-        .keyboard.addKey(Phaser.Keyboard.DOWN)
-        .onDown.add(moveDown);
-    game.input.keyboard
-        .addKey(Phaser.Keyboard.SPACEBAR)
-        .onDown.add(playerJump);
-    heart();
-    generatePipe();
     KermitGlide(0,200,100);
     KermitGlide(-100,200,100);
     KermitGlide(-200,200,100);
     KermitGlide(-300,200,100);
+//    player.body.velocity.x = 100;
+    //player.body.velocity.x=100;
+    //game.input
+    //    .keyboard.addKey(Phaser.Keyboard.RIGHT)
+    //    .onDown.add(moveRight);
+    //game.input
+    //    .keyboard.addKey(Phaser.Keyboard.LEFT)
+    //    .onDown.add(moveLeft);
+    //game.input
+    //    .keyboard.addKey(Phaser.Keyboard.UP)
+    //    .onDown.add(moveUp);
+    //game.input
+    //    .keyboard.addKey(Phaser.Keyboard.DOWN)
+    //    .onDown.add(moveDown);
+    heart();
+    //("#greeting").fadeOut(1000);
+
+    bigflower = game.add.sprite(width/2, height/2, "bigflower");
+    game.physics.arcade.enable(bigflower);
+    bigflower.anchor.setTo(0.5, 0.5);
+
+
+    splashDisplay = game.add.text(10,50,
+        "enter to start, spacebar to jump",
+        {font: "30px Comic Sans MS", fill: "#00FF00" });
+    game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(start);
+}
+
+function start(){
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+    //game.input
+    //    .onDown
+    //    .add(clickHandler);
+    game.input
+        .keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+        .onDown.add(spaceHandler);
+    player.body.gravity.y = gravity;
+    game.input.keyboard
+        .addKey(Phaser.Keyboard.SPACEBAR)
+        .onDown.add(playerJump);
+    generatePipe();
     game.time.events.loop(pipeInterval*Phaser.Timer.SECOND,generate);
     game.time.events.loop(pipeInterval*Phaser.Timer.SECOND,changeScore);
-    //("#greeting").fadeOut(1000);
     RedKermitGlide(5000,150,-1000);
+    splashDisplay.destroy();
+    bigflower.destroy()
+    //background.autoScroll(-backgroungVelocity,0);
+    game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.remove(start);
 }
 
 function update() {
@@ -133,6 +154,15 @@ function update() {
         }
         redkermits[index].rotation += 0.1;
     }
+
+    //for(var index=0;index<backgrounds.length;index++) {
+    //    if (backgrounds[index].x == -3802) {
+    //        backgrounds[index].x =800
+    //    }
+    //}
+
+    bigflower.rotation += 0.075;
+
     if (
             player.y > 600 ||
             player.y < 0 ) {
@@ -164,6 +194,7 @@ function restart() {
     gravity = 300;
     game.state.restart();
 }
+
 
 function clickHandler(event) {
     game.add.sprite(event.x-35, event.y, "kermit");
@@ -262,6 +293,13 @@ function gameOver(){
     //$("#greeting").show();
 }
 
+function backgroundroll(x) {
+    background = game.add.sprite(x, 0, "backgroundImg");
+    game.physics.arcade.enable(background);
+    background.body.velocity.x = -100;
+    backgrounds.push(background);
+}
+
 function KermitGlide(x,y,v) {
     kermit = game.add.sprite(x, y, "kermit");
     game.physics.arcade.enable(kermit);
@@ -298,7 +336,7 @@ function moveDown() {
 }
 
 function generate(){
-    var diceRoll = game.rnd.integerInRange(1, 10);
+    var diceRoll = game.rnd.integerInRange(1, 15);
     if(diceRoll==1) {
         generateBalloons();
     }
