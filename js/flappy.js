@@ -20,6 +20,7 @@ var weights = [];
 var splashDisplay ;
 var background;
 var backgrounds = [];
+var enemys = [];
 
 
 
@@ -64,6 +65,7 @@ function preload() {
     game.load.image("balloon","../assets/balloons.png" );
     game.load.image("weight","../assets/weight.png");
     game.load.image("bigflower","../assets/bigflower.gif");
+    game.load.image("enemy1","../assets/enemy2.png");
     $("#greeting").hide();
 }
 
@@ -129,6 +131,7 @@ function start(){
     generatePipe();
     game.time.events.loop(pipeInterval*Phaser.Timer.SECOND,generate);
     game.time.events.loop(pipeInterval*Phaser.Timer.SECOND,changeScore);
+
     RedKermitGlide(5000,150,-1000);
     splashDisplay.destroy();
     bigflower.destroy()
@@ -142,6 +145,13 @@ function update() {
         .overlap(player,
                   pipes,
                   gameOver);
+
+    game.physics.arcade
+        .overlap(player,
+        enemys,
+        gameOver);
+
+
 
     for(var index=0;index<kermits.length;index++) {
         if (kermits[index].x > 800) {
@@ -160,6 +170,11 @@ function update() {
     //        backgrounds[index].x =800
     //    }
     //}
+
+    for(var index=0;index<enemys.length;index++) {
+        enemys[index].body.velocity.y += getRandomInt(-10,10);
+        enemys[index].body.velocity.x += getRandomInt(-10,10)
+    }
 
     bigflower.rotation += 0.075;
 
@@ -199,6 +214,10 @@ function restart() {
 function clickHandler(event) {
     game.add.sprite(event.x-35, event.y, "kermit");
     game.sound.play("score");
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function spaceHandler() {
@@ -293,6 +312,21 @@ function gameOver(){
     //$("#greeting").show();
 }
 
+//function gameOvertwo(){
+//    game.add.text(0, 100, "KERMIT GOT U LOLOLOLOLOLOLLOL",
+//        {font: "100px Arial", fill: "#00FF00"});
+//    //setTimeout(function(){
+//    //    game.destroy();
+//    //},1);
+//    setTimeout(function(){
+//        game.paused = true;
+//    },1);
+//    //game.paused(true);
+//    $("#score").val(score.toString());
+//    $("#greeting").fadeIn(2000);
+//    //$("#greeting").show();
+//}
+
 function backgroundroll(x) {
     background = game.add.sprite(x, 0, "backgroundImg");
     game.physics.arcade.enable(background);
@@ -335,6 +369,15 @@ function moveDown() {
     player.body.velocity.y = 100;
 }
 
+
+function enemy () {
+    var enemy = game.add.sprite(width,height/2,"enemy1");
+    enemys.push(enemy);
+    game.physics.arcade.enable(enemy);
+    enemy.body.velocity.x=-200;
+}
+
+
 function generate(){
     var diceRoll = game.rnd.integerInRange(1, 15);
     if(diceRoll==1) {
@@ -342,18 +385,24 @@ function generate(){
     }
     else if(diceRoll==2) {
         generateWeight();
+
+    }
+    else if(diceRoll>11){
+        enemy();
     }
     else {
         generatePipe();
     }
 }
 
+
+
 function generateBalloons(){
     var bonus = game.add.sprite(width, height/2, "balloon");
     balloons.push(bonus);
     game.physics.arcade.enable(bonus);
     bonus.body.velocity.x = - 100;
-    bonus.body.velocity.y = - game.rnd.integerInRange(-50,50);
+    bonus.body.velocity.y = game.rnd.integerInRange(-50,50);
 }
 
 function generateWeight(){
