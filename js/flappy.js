@@ -14,13 +14,16 @@ var jump = 300;
 var pipeInterval = 2;
 var gapSize = 350;
 var gapMargin = 50;
+var bigflower;
 var blockHeight = 50;
 var balloons = [];
 var weights = [];
 var splashDisplay ;
-var background;
+var background1;
+var background2;
 var backgrounds = [];
 var enemys = [];
+var backgroundspeed = 100;
 
 
 
@@ -74,7 +77,11 @@ function preload() {
  */
 function create() {
     game.stage.setBackgroundColor("#FFFF00");
-    game.add.image(0, 0, "backgroundImg");
+    //game.add.image(0, 0, "backgroundImg");
+    background1 = game.add.sprite(0,0,"backgroundImg");
+    background2 = game.add.sprite(3802,0,"backgroundImg");
+    game.physics.arcade.enable(background1);
+    game.physics.arcade.enable(background2);
     //backgroundroll(0)
     //backgroundroll(3802)
     game.add.text(-13, 300, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
@@ -132,9 +139,12 @@ function start(){
     game.time.events.loop(pipeInterval*Phaser.Timer.SECOND,generate);
     game.time.events.loop(pipeInterval*Phaser.Timer.SECOND,changeScore);
 
+    background1.body.velocity.x = -backgroundspeed;
+    background2.body.velocity.x = -backgroundspeed;
+
     RedKermitGlide(5000,150,-1000);
     splashDisplay.destroy();
-    bigflower.destroy()
+    bigflower.destroy();
     //background.autoScroll(-backgroungVelocity,0);
     game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.remove(start);
 }
@@ -144,18 +154,23 @@ function update() {
     game.physics.arcade
         .overlap(player,
                   pipes,
-                  gameOver);
+                  function(){
+                      console.log("cause of death: pipes");
+                      gameOver();
+                  });
 
     game.physics.arcade
         .overlap(player,
         enemys,
-        gameOver);
-
+        function(){
+            console.log("cause of death: KERMIT");
+            gameOver();
+        });
 
 
     for(var index=0;index<kermits.length;index++) {
         if (kermits[index].x > 800) {
-            kermits[index].x = -180
+            kermits[index].x = -180;
         }
     }
     for(var index=0;index<redkermits.length;index++) {
@@ -165,15 +180,17 @@ function update() {
         redkermits[index].rotation += 0.1;
     }
 
-    //for(var index=0;index<backgrounds.length;index++) {
-    //    if (backgrounds[index].x == -3802) {
-    //        backgrounds[index].x =800
-    //    }
-    //}
+    if (background1.x < -3802){
+        background1.x = 3801;
+    }
+
+    if (background2.x < -3802){
+        background2.x = 3801;
+    }
 
     for(var index=0;index<enemys.length;index++) {
         enemys[index].body.velocity.y += getRandomInt(-10,10);
-        enemys[index].body.velocity.x += getRandomInt(-10,10)
+        enemys[index].body.velocity.x += getRandomInt(-10,10);
     }
 
     bigflower.rotation += 0.075;
@@ -181,6 +198,7 @@ function update() {
     if (
             player.y > 600 ||
             player.y < 0 ) {
+        console.log("cause of death: you escaped");
         gameOver();
     }
 
@@ -300,16 +318,12 @@ function changeGravity(g) {
 function gameOver(){
     game.add.text(0, 100, "YOU DIED LOL",
         {font: "100px Arial", fill: "#FF69B4"});
-    //setTimeout(function(){
-    //    game.destroy();
-    //},1);
+
     setTimeout(function(){
         game.paused = true;
     },1);
-    //game.paused(true);
     $("#score").val(score.toString());
     $("#greeting").fadeIn(2000);
-    //$("#greeting").show();
 }
 
 //function gameOvertwo(){
@@ -327,12 +341,6 @@ function gameOver(){
 //    //$("#greeting").show();
 //}
 
-function backgroundroll(x) {
-    background = game.add.sprite(x, 0, "backgroundImg");
-    game.physics.arcade.enable(background);
-    background.body.velocity.x = -100;
-    backgrounds.push(background);
-}
 
 function KermitGlide(x,y,v) {
     kermit = game.add.sprite(x, y, "kermit");
@@ -369,7 +377,6 @@ function moveDown() {
     player.body.velocity.y = 100;
 }
 
-
 function enemy () {
     var enemy = game.add.sprite(width,height/2,"enemy1");
     enemys.push(enemy);
@@ -377,25 +384,24 @@ function enemy () {
     enemy.body.velocity.x=-200;
 }
 
-
 function generate(){
     var diceRoll = game.rnd.integerInRange(1, 15);
     if(diceRoll==1) {
         generateBalloons();
+        generatePipe();
     }
     else if(diceRoll==2) {
         generateWeight();
+        generatePipe();
 
     }
-    else if(diceRoll>11){
+    else if(diceRoll>12){
         enemy();
     }
     else {
         generatePipe();
     }
 }
-
-
 
 function generateBalloons(){
     var bonus = game.add.sprite(width, height/2, "balloon");
