@@ -24,6 +24,7 @@ var background2;
 var backgrounds = [];
 var enemys = [];
 var backgroundspeed = 100;
+var music;
 
 
 
@@ -59,7 +60,10 @@ function preload() {
     game.load.image("kermit", "../assets/kermit.gif");
     game.load.image("heart", "../assets/heart.jpg");
     game.load.image("backgroundImg", "../assets/background2.gif");
-    game.load.audio("score", "../assets/point.ogg");
+    //game.load.audio("score", "../assets/point.ogg");
+    game.load.audio("arkona", "../assets/arkona.mp3");
+    game.load.audio("scream", "../assets/scream.mp3");
+    game.load.audio("boom", "../assets/boom.mp3");
     game.load.image("kitten", "../assets/kitten.gif");
     game.load.image("flower","../assets/flower.jpg" );
     game.load.image("redkermit","../assets/redkermit.gif" );
@@ -124,13 +128,11 @@ function create() {
 }
 
 function start(){
+    music = game.add.audio('arkona',0.5,true);
     game.physics.startSystem(Phaser.Physics.ARCADE);
     //game.input
     //    .onDown
     //    .add(clickHandler);
-    game.input
-        .keyboard.addKey(Phaser.Keyboard.SPACEBAR)
-        .onDown.add(spaceHandler);
     player.body.gravity.y = gravity;
     game.input.keyboard
         .addKey(Phaser.Keyboard.SPACEBAR)
@@ -156,6 +158,7 @@ function update() {
                   pipes,
                   function(){
                       console.log("cause of death: pipes");
+                      game.sound.play("boom");
                       gameOver();
                   });
 
@@ -164,6 +167,7 @@ function update() {
         enemys,
         function(){
             console.log("cause of death: KERMIT");
+            game.sound.play("scream");
             gameOver();
         });
 
@@ -231,16 +235,16 @@ function restart() {
 
 function clickHandler(event) {
     game.add.sprite(event.x-35, event.y, "kermit");
-    game.sound.play("score");
+    //game.sound.play("score");
 }
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function spaceHandler() {
-    game.sound.play("score");
-}
+//function spaceHandler() {
+////    game.sound.play("score");
+//}
 
 function changeScore() {
     score = score+1;
@@ -316,6 +320,7 @@ function changeGravity(g) {
 }
 
 function gameOver(){
+    this.music.stop();
     game.add.text(0, 100, "YOU DIED LOL",
         {font: "100px Arial", fill: "#FF69B4"});
 

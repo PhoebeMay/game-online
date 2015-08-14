@@ -44,7 +44,7 @@ app.post('/score', function(request, response){
 });
 
 
-
+//(process.env.PORT || 8080)
 
 var server = app.listen((8080), function() {
     var host = server.address().address;
