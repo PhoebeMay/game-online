@@ -348,14 +348,14 @@ function gameOver(){
 
 
 function KermitGlide(x,y,v) {
-    kermit = game.add.sprite(x, y, "kermit");
+    var kermit = game.add.sprite(x, y, "kermit");
     game.physics.arcade.enable(kermit);
     kermit.body.velocity.x=v;
     kermits.push(kermit);
 }
 
 function RedKermitGlide(x,y,v) {
-    redkermit = game.add.sprite(x, y, "redkermit");
+    var redkermit = game.add.sprite(x, y, "redkermit");
     game.physics.arcade.enable(redkermit);
     redkermit.body.velocity.x=v;
     redkermit.anchor.setTo(0.5, 0.5);
