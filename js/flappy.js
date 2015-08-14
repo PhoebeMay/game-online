@@ -56,7 +56,7 @@ function preload() {
     });
 
 
-    game.load.image("playerImg", "../assets/jamesBond.gif");
+    //game.load.image("playerImg", "../assets/jamesBond.gif");
     game.load.image("kermit", "../assets/kermit.gif");
     game.load.image("heart", "../assets/heart.jpg");
     game.load.image("backgroundImg", "../assets/background2.gif");
