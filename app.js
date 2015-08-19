@@ -9,7 +9,7 @@ app.use(express.static(path.join(__dirname, "")));
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.get("/", function(request, response){
-    response.sendFile(path.join(__dirname, "pages/game.html"));
+    response.sendFile(path.join(__dirname, "pages/index.html"));
 });
 
 app.get("/score", function(request, response) {
