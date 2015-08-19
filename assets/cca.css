@@ -21,7 +21,7 @@ body {
     padding-bottom: 20px;
 }
 #header p{
-    color: white;
+    color: #ffff00;
     font-family: 'Roboto', sans-serif;
     font-size: 20px;
 }
@@ -29,7 +29,7 @@ body {
     text-decoration: none;
 }
 #header h1 {
-    color: white;
+    color: deeppink;
     font-family: 'Roboto', sans-serif;
     font-size: 46px;
 }
@@ -47,7 +47,7 @@ body {
     background-size: 100%;
 }
 #footer p{
-    color: white;
+    color: #ffff00;
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
     padding: 20px;

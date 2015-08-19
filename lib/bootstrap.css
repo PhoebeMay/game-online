@@ -63,6 +63,8 @@ dfn {
 h1 {
     margin: .67em 0;
     font-size: 2em;
+    font-family: "Giddyup Std";
+    font-style: italic;
 }
 mark {
     color: #000;
@@ -106,7 +108,7 @@ code,
 kbd,
 pre,
 samp {
-    font-family: monospace, monospace;
+    font-family:"Giddyup Std";
     font-size: 1em;
 }
 button,
@@ -4622,8 +4624,8 @@ a.badge:focus {
 .jumbotron {
     padding: 30px 15px;
     margin-bottom: 30px;
-    color: inherit;
-    background-color: #eee;
+    color: deeppink;
+    background-color:greenyellow;
 }
 .jumbotron h1,
 .jumbotron .h1 {
@@ -6330,3 +6332,65 @@ button.close {
     }
 }
 /*# sourceMappingURL=bootstrap.css.map */
+
+#a0 {
+    color: #ffff00;
+    background-color: black;
+    font-size: 100px;
+    font-family: "Giddyup Std" ;
+    border: 50px greenyellow;
+    text-align: center;
+}
+
+#a1 {
+    color: orangered;
+    background-color: black;
+    font-size: 75px;
+    font-family: "Giddyup Std" ;
+    text-align: center;
+}
+
+#a2 {
+    color: red;
+    background-color: black;
+    font-size: 50px;
+    font-family: "Giddyup Std" ;
+    border: 50px greenyellow;
+    text-align: center;
+}
+
+
+#a3 {
+    color: purple;
+    background-color: black;
+    font-size: 25px;
+    font-family: "Giddyup Std" ;
+    border: 50px greenyellow;
+    text-align: center;
+}
+
+body {
+    background-color: mediumpurple;
+    margin: 0%;
+}
+
+p {
+    color: white;
+    background-color: black;
+    font-size: 25px;
+    font-family: "Giddyup Std" ;
+    border: 50px greenyellow;
+    text-align: center;
+}
+
+#greeting {
+    /*position: absolute;        */
+    /*left: 40%;                 */
+    /*top: 40%;                  */
+    background:green;
+    width: 300px;
+    height: 220px;
+    border: 5px red;
+    border-radius: 10px;
+    padding: 20px;
+}
